@@ -4,7 +4,7 @@ FLAGS = -O2 -funroll-loops -fpeel-loops -fgcse-sm -fgcse-las $(ADD_FLAGS)
 FLAGS_STR = "$(FLAGS)"
 
 CFLAGS_COMMON = -static -std=gnu99 -fno-common -fno-builtin-printf -DTCM=$(TCM)
-CFLAGS_ARCH = -Wa,-march=rv32$(ARCH) -march=rv32$(ARCH) -mabi=$(ABI)
+CFLAGS_ARCH = -Wa,-march=rv32$(ARCH) -march=rv32$(ARCH) -mabi=$(ABI) -misa-spec=2.2
 
 CFLAGS := $(FLAGS) $(EXT_CFLAGS) \
 $(CFLAGS_COMMON) \

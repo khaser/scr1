@@ -80,6 +80,7 @@ build_ncsim: $(sv_list)
 build_verilator: $(sv_list)
 	cd $(bld_dir); \
 	verilator \
+	--timing \
 	-cc \
 	-sv \
 	+1800-2017ext+sv \
@@ -101,6 +102,7 @@ build_verilator: $(sv_list)
 build_verilator_wf: $(sv_list)
 	cd $(bld_dir); \
 	verilator \
+	--timing \
 	-cc \
 	-sv \
 	+1800-2017ext+sv \

@@ -97,7 +97,7 @@ SIM_BUILD_OPTS ?=
 
 # Use this parameter to set the list of tests to run
 # TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample>
-export TARGETS :=
+export TARGETS := 
 
 
 export XLEN  ?= 32
@@ -169,10 +169,10 @@ TARGETS += riscv_arch
 TARGETS += isr_sample
 
 # Comment this target if you don't want to run the coremark
-TARGETS += coremark
+# TARGETS += coremark
 
 # Comment this target if you don't want to run the dhrystone
-TARGETS += dhrystone21
+# TARGETS += dhrystone21
 
 # Comment this target if you don't want to run the hello test
 TARGETS += hello
@@ -245,6 +245,7 @@ run_vcs: $(test_info)
 	$(VCS_OPTS) | tee $(sim_results)  ;\
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
+
 run_modelsim: $(test_info)
 	$(MAKE) -C $(root_dir)/sim build_modelsim SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)"; \
 	printf "" > $(test_results); \
@@ -305,6 +306,7 @@ run_verilator_wf: $(test_info)
 	printf "Simulation performed on $$(verilator -version) \n" ;\
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
+
 clean:
 	$(RM) -R $(root_dir)/build/*
 #	$(MAKE) -C $(tst_dir)/benchmarks/dhrystone21 clean

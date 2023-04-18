@@ -1,2 +1,3 @@
 build/**
+.direnv/**
 sim/tests/benchmarks/coremark/src/**

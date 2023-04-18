@@ -128,7 +128,7 @@ filtered_e      := $(filter-out $(cut_list),$(testnames_e))
 filtered_em      := $(filter-out $(cut_list),$(testnames_em))
 filtered_ec       := $(filter-out $(cut_list),$(testnames_ec))
 
-CFLAGS := -I$(inc_dir) -I$(src_dir) -DASM -mabi=$(ABI) $(EXT_CFLAGS) -DXLEN=$(XLEN) -D__riscv_xlen=$(XLEN) -w
+CFLAGS := -I$(inc_dir) -I$(src_dir) -DASM -mabi=$(ABI) $(EXT_CFLAGS) -DXLEN=$(XLEN) -D__riscv_xlen=$(XLEN) -w -misa-spec=2.2
 LDFLAGS := -static -fvisibility=hidden -nostdlib -nostartfiles -T$(inc_dir)/link.ld -march=$(ARCH) -mabi=$(ABI)
 GCCVERSIONGT7 := $(shell expr `$(RISCV_GCC) -dumpfullversion | cut -f1 -d'.'` \> 7)
 ifeq "$(GCCVERSIONGT7)" "1"

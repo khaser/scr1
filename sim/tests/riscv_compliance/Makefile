@@ -84,7 +84,7 @@ filtered_imc      := $(filter-out $(cut_list),$(testnames_imc))
 
 # ARCH_FLAGS := -Wa,-march=rv32im -march=rv32im
 # ARCH_FLAGS_C := -Wa,-march=rv32imc -march=rv32imc
-CFLAGS := -I$(inc_dir) -I$(src_dir) -DASM -mabi=ilp32 -D__riscv_xlen=32 -w
+CFLAGS := -I$(inc_dir) -I$(src_dir) -DASM -mabi=ilp32 -D__riscv_xlen=32 -w -misa-spec=2.2
 LDFLAGS := -static -fvisibility=hidden -nostdlib -nostartfiles -T$(inc_dir)/link.ld -march=$(ARCH) -mabi=ilp32
 GCCVERSIONGT7 := $(shell expr `$(RISCV_GCC) -dumpfullversion | cut -f1 -d'.'` \> 7)
 ifeq "$(GCCVERSIONGT7)" "1"
