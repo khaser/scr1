@@ -156,17 +156,17 @@ endif
 #--
 ifeq (,$(findstring e,$(ARCH_lowercase)))
     # Comment this target if you don't want to run the riscv_isa
-    TARGETS += riscv_isa
+    # TARGETS += riscv_isa
 
     # Comment this target if you don't want to run the riscv_compliance
-    TARGETS += riscv_compliance
+    # TARGETS += riscv_compliance
 endif
 
 # Comment this target if you don't want to run the riscv_arch
-TARGETS += riscv_arch
+# TARGETS += riscv_arch
 
 # Comment this target if you don't want to run the isr_sample
-TARGETS += isr_sample
+# TARGETS += isr_sample
 
 # Comment this target if you don't want to run the coremark
 # TARGETS += coremark
@@ -175,7 +175,10 @@ TARGETS += isr_sample
 # TARGETS += dhrystone21
 
 # Comment this target if you don't want to run the hello test
-TARGETS += hello
+# TARGETS += hello
+
+# Comment this target if you don't want to run the hello test
+TARGETS += rv_torture
 
 # When RVE extension is on, we want to exclude some tests, even if they are given from the command line
 ifneq (,$(findstring e,$(ARCH_lowercase)))
@@ -225,7 +228,10 @@ riscv_arch: | $(bld_dir)
 	$(MAKE) -C $(tst_dir)/riscv_arch ARCH=$(ARCH)
 
 hello: | $(bld_dir)
-	-$(MAKE) -C $(tst_dir)/hello EXT_CFLAGS="$(EXT_CFLAGS)" ARCH=$(ARCH)
+	$(MAKE) -C $(tst_dir)/hello EXT_CFLAGS="$(EXT_CFLAGS)" ARCH=$(ARCH)
+
+rv_torture: | $(bld_dir)
+	$(MAKE) -C $(tst_dir)/rv_torture ARCH=$(ARCH)
 
 clean_hex: | $(bld_dir)
 	$(RM) $(bld_dir)/*.hex
