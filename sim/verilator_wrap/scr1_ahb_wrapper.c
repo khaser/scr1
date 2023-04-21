@@ -9,17 +9,17 @@
 #define STRINGIFY(s) _STRINGIFY(s)
 #define _STRINGIFY(s) #s
 
-Vscr1_top_tb_ahb *top;
-
 vluint64_t main_time = 0;
 
 int main(int argc, char** argv) {
-    Verilated::commandArgs(argc, argv);
 
-    top = new Vscr1_top_tb_ahb;
+    const std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
+    contextp->debug(0);
+    contextp->commandArgs(argc, argv);
+    const std::unique_ptr<Vscr1_top_tb_ahb> top{new Vscr1_top_tb_ahb{contextp.get(), "TOP"}};
 
 #ifdef VCD_TRACE
-    Verilated::traceEverOn(true);
+    contextp->traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
 #ifdef TRACE_LVLV
     top->trace(tfp, TRACE_LVLV);
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 #endif // #ifdef VCD_FNAME
 #endif // #ifdef VCD_TRACE
 
-    while (!Verilated::gotFinish()) {
+    while (!contextp->gotFinish()) {
         if ((main_time % 10) == 1) {
             top->clk = 1;
         }
@@ -48,9 +48,9 @@ int main(int argc, char** argv) {
 #endif // #ifdef VCD_TRACE
     }
     top->final();
+    contextp->coveragep()->write("coverage.dat");
 #ifdef VCD_TRACE
     tfp->close();
 #endif // #ifdef VCD_TRACE
-    delete top;
 }
 

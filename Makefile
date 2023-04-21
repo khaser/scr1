@@ -163,7 +163,7 @@ ifeq (,$(findstring e,$(ARCH_lowercase)))
 endif
 
 # Comment this target if you don't want to run the riscv_arch
-# TARGETS += riscv_arch
+TARGETS += riscv_arch
 
 # Comment this target if you don't want to run the isr_sample
 # TARGETS += isr_sample
@@ -178,7 +178,7 @@ endif
 # TARGETS += hello
 
 # Comment this target if you don't want to run the hello test
-TARGETS += rv_torture
+# TARGETS += rv_torture
 
 # When RVE extension is on, we want to exclude some tests, even if they are given from the command line
 ifneq (,$(findstring e,$(ARCH_lowercase)))
