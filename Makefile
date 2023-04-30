@@ -314,8 +314,10 @@ run_verilator_wf: $(test_info)
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
 
-run_verilator_torture: rv_torture
+build_verilator:
 	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
+
+run_rv_torture_test: build_verilator rv_torture
 	cd $(bld_dir); \
 	$(bld_dir)/verilator/V$(top_module) \
 	+test_name=$(test_signature) \
