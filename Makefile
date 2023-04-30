@@ -96,7 +96,7 @@ endif
 SIM_BUILD_OPTS ?=
 
 # Use this parameter to set the list of tests to run
-# TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample, rv_torture>
+# TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample>
 export TARGETS := 
 
 
@@ -121,7 +121,7 @@ endif
 export root_dir := $(shell pwd)
 export tst_dir  := $(root_dir)/sim/tests
 export inc_dir  := $(tst_dir)/common
-export bld_dir  := $(root_dir)/build/$(current_goal)_$(BUS)_$(CFG)_$(ARCH)_IPIC_$(IPIC)_TCM_$(TCM)_VIRQ_$(VECT_IRQ)_TRACE_$(TRACE)
+export bld_dir  := $(root_dir)/build/$(BUS)_$(CFG)_$(ARCH)_IPIC_$(IPIC)_TCM_$(TCM)_VIRQ_$(VECT_IRQ)_TRACE_$(TRACE)
 
 test_results   := $(bld_dir)/test_results.txt
 test_info      := $(bld_dir)/test_info
@@ -178,9 +178,6 @@ TARGETS += dhrystone21
 # Comment this target if you don't want to run the hello test
 TARGETS += hello
 
-# Comment this target if you don't want to run the hello test
-TARGETS += rv_torture
-
 # When RVE extension is on, we want to exclude some tests, even if they are given from the command line
 ifneq (,$(findstring e,$(ARCH_lowercase)))
     excluded := riscv_isa riscv_compliance
@@ -194,7 +191,7 @@ ifeq (,$(strip $(TARGETS)))
 endif
 
 # Targets
-.PHONY: tests run_modelsim run_vcs run_ncsim run_verilator run_verilator_wf
+.PHONY: tests run_modelsim run_vcs run_ncsim run_verilator run_verilator_wf build_verilator run_rv_torture_test
 
 default: clean_test_list run_verilator
 
@@ -230,9 +227,6 @@ riscv_arch: | $(bld_dir)
 
 hello: | $(bld_dir)
 	$(MAKE) -C $(tst_dir)/hello EXT_CFLAGS="$(EXT_CFLAGS)" ARCH=$(ARCH)
-
-rv_torture: | $(bld_dir)
-	$(MAKE) -C $(tst_dir)/rv_torture ARCH=$(ARCH)
 
 clean_hex: | $(bld_dir)
 	$(RM) $(bld_dir)/*.hex
@@ -317,7 +311,8 @@ run_verilator_wf: $(test_info)
 build_verilator: | $(bld_dir)
 	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)"
 
-run_rv_torture_test: build_verilator rv_torture
+run_rv_torture_test: 
+	$(MAKE) -C $(tst_dir)/rv_torture ARCH=$(ARCH)
 	cd $(bld_dir); \
 	$(bld_dir)/verilator/V$(top_module) \
 	+test_name=$(test_signature) \
