@@ -157,23 +157,23 @@ endif
 #--
 ifeq (,$(findstring e,$(ARCH_lowercase)))
     # Comment this target if you don't want to run the riscv_isa
-    # TARGETS += riscv_isa
+    TARGETS += riscv_isa
 
     # Comment this target if you don't want to run the riscv_compliance
-    # TARGETS += riscv_compliance
+    TARGETS += riscv_compliance
 endif
 
 # Comment this target if you don't want to run the riscv_arch
-# TARGETS += riscv_arch
+TARGETS += riscv_arch
 
 # Comment this target if you don't want to run the isr_sample
-# TARGETS += isr_sample
+TARGETS += isr_sample
 
 # Comment this target if you don't want to run the coremark
-# TARGETS += coremark
+TARGETS += coremark
 
 # Comment this target if you don't want to run the dhrystone
-# TARGETS += dhrystone21
+TARGETS += dhrystone21
 
 # Comment this target if you don't want to run the hello test
 TARGETS += hello
@@ -284,7 +284,7 @@ run_ncsim: $(test_info)
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
 
-run_verilator_no_sig: $(test_info)
+run_verilator: $(test_info)
 	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
 	printf "" > $(test_results);
 	cd $(bld_dir); \
@@ -298,21 +298,6 @@ run_verilator_no_sig: $(test_info)
 	printf "Simulation performed on $$(verilator -version) \n" ;\
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
-
-run_verilator: $(test_info)
-	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
-	printf "" > $(test_results);
-	cd $(bld_dir); \
-	echo $(top_module) | tee $(sim_results); \
-	$(bld_dir)/verilator/V$(top_module) \
-	+test_name=$(test_signature) \
-	+imem_pattern=$(imem_pattern) \
-	+dmem_pattern=$(dmem_pattern) \
-	$(VERILATOR_OPTS) | tee -a $(sim_results) ;\
-	printf "Simulation performed on $$(verilator -version) \n" ;\
-	printf "                          Test               | build | simulation \n" ; \
-	printf "$$(cat $(test_results)) \n"
-
 
 run_verilator_wf: $(test_info)
 	$(MAKE) -C $(root_dir)/sim build_verilator_wf SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
@@ -328,6 +313,14 @@ run_verilator_wf: $(test_info)
 	printf "Simulation performed on $$(verilator -version) \n" ;\
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
+
+run_verilator_torture: rv_torture
+	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
+	cd $(bld_dir); \
+	$(bld_dir)/verilator/V$(top_module) \
+	+test_name=$(test_signature) \
+	+imem_pattern=$(imem_pattern) \
+	+dmem_pattern=$(dmem_pattern)
 
 clean:
 	$(RM) -R $(root_dir)/build/*
