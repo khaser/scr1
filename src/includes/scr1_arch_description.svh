@@ -205,6 +205,7 @@ parameter bit [`SCR1_DMEM_AWIDTH-1:0]   SCR1_TIMER_ADDR_PATTERN     = 'h00490000
 //`define SCR1_TRGT_SIMULATION            // enable simulation code (automatically defined by root makefile)
 //`define SCR1_TRACE_LOG_EN               // enable tracelog
 //`define SCR1_XPROP_EN                   // enable X-propagation
+`define SIGNATURE_OUT
 
 // Addresses used in testbench
 localparam [`SCR1_XLEN-1:0]      SCR1_SIM_EXIT_ADDR      = 32'h0000_00F8;

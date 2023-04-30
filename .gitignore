@@ -1,3 +1,4 @@
 build/**
 .direnv/**
+coverage_tests/**
 sim/tests/benchmarks/coremark/src/**

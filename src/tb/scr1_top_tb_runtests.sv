@@ -12,10 +12,12 @@ initial begin
     $value$plusargs("dmem_pattern=%h", dmem_req_ack_stall);
 
 `ifdef SIGNATURE_OUT
+    $display("Signature output enabled");
     $value$plusargs("test_name=%s", s_testname);
     b_single_run_flag = 1;
 `else // SIGNATURE_OUT
 
+    $display("Signature output disabled");
     $value$plusargs("test_info=%s", s_info);
     $value$plusargs("test_results=%s", s_results);
 
@@ -92,7 +94,7 @@ always_ff @(posedge clk) begin
 
                 `ifdef SIGNATURE_OUT
 
-                    $sformat(tmpstr, "%s.signature.output", s_testname);
+                    $sformat(tmpstr, "%s.sig", s_testname);
 `ifdef VERILATOR
                     tmpstr = remove_trailing_whitespaces(tmpstr);
 `endif
@@ -157,7 +159,7 @@ always_ff @(posedge clk) begin
     end else begin
 `ifdef SIGNATURE_OUT
         if ((s_testname.len() != 0) && (b_single_run_flag)) begin
-            $sformat(test_file, "%s.bin", s_testname);
+            $sformat(test_file, "%s.hex", s_testname);
 `else // SIGNATURE_OUT
         if (f_info) begin
 `ifdef VERILATOR
@@ -170,7 +172,7 @@ always_ff @(posedge clk) begin
 `endif // SIGNATURE_OUT
             f_test = $fopen(test_file,"r");
             if (f_test != 0) begin
-            // Launch new test
+                // Launch new test
                 `ifdef SCR1_TRACE_LOG_EN
                     i_top.i_core_top.i_pipe_top.i_tracelog.test_name = test_file;
                 `endif // SCR1_TRACE_LOG_EN

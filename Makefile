@@ -123,9 +123,10 @@ export tst_dir  := $(root_dir)/sim/tests
 export inc_dir  := $(tst_dir)/common
 export bld_dir  := $(root_dir)/build/$(current_goal)_$(BUS)_$(CFG)_$(ARCH)_IPIC_$(IPIC)_TCM_$(TCM)_VIRQ_$(VECT_IRQ)_TRACE_$(TRACE)
 
-test_results := $(bld_dir)/test_results.txt
-test_info    := $(bld_dir)/test_info
-sim_results  := $(bld_dir)/sim_results.txt
+test_results   := $(bld_dir)/test_results.txt
+test_info      := $(bld_dir)/test_info
+test_signature := rv_torture
+sim_results    := $(bld_dir)/sim_results.txt
 
 todo_list    := $(bld_dir)/todo.txt
 # Environment
@@ -163,7 +164,7 @@ ifeq (,$(findstring e,$(ARCH_lowercase)))
 endif
 
 # Comment this target if you don't want to run the riscv_arch
-TARGETS += riscv_arch
+# TARGETS += riscv_arch
 
 # Comment this target if you don't want to run the isr_sample
 # TARGETS += isr_sample
@@ -175,10 +176,10 @@ TARGETS += riscv_arch
 # TARGETS += dhrystone21
 
 # Comment this target if you don't want to run the hello test
-# TARGETS += hello
+TARGETS += hello
 
 # Comment this target if you don't want to run the hello test
-# TARGETS += rv_torture
+TARGETS += rv_torture
 
 # When RVE extension is on, we want to exclude some tests, even if they are given from the command line
 ifneq (,$(findstring e,$(ARCH_lowercase)))
@@ -283,7 +284,7 @@ run_ncsim: $(test_info)
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
 
-run_verilator: $(test_info)
+run_verilator_no_sig: $(test_info)
 	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
 	printf "" > $(test_results);
 	cd $(bld_dir); \
@@ -297,6 +298,21 @@ run_verilator: $(test_info)
 	printf "Simulation performed on $$(verilator -version) \n" ;\
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
+
+run_verilator: $(test_info)
+	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
+	printf "" > $(test_results);
+	cd $(bld_dir); \
+	echo $(top_module) | tee $(sim_results); \
+	$(bld_dir)/verilator/V$(top_module) \
+	+test_name=$(test_signature) \
+	+imem_pattern=$(imem_pattern) \
+	+dmem_pattern=$(dmem_pattern) \
+	$(VERILATOR_OPTS) | tee -a $(sim_results) ;\
+	printf "Simulation performed on $$(verilator -version) \n" ;\
+	printf "                          Test               | build | simulation \n" ; \
+	printf "$$(cat $(test_results)) \n"
+
 
 run_verilator_wf: $(test_info)
 	$(MAKE) -C $(root_dir)/sim build_verilator_wf SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";

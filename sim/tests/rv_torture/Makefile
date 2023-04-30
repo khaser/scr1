@@ -22,6 +22,7 @@ $(bld_dir)/%.elf: $(asm_objs) | $(obj_dir)
 	$(RISCV_GCC) -o $@ $^ $(LDFLAGS)
 
 $(bld_dir)/%.hex: $(bld_dir)/%.elf
+	@echo creating hex file for rv_torture
 	$(RISCV_OBJCOPY) $^ $@
 
 $(bld_dir)/%.dump: $(bld_dir)/%.elf

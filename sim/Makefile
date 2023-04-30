@@ -81,7 +81,8 @@ build_verilator: $(sv_list)
 	cd $(bld_dir); \
 	verilator \
 	--timing \
-	--coverage \
+	--coverage-line \
+	--autoflush \
 	-cc \
 	-sv \
 	+1800-2017ext+sv \
