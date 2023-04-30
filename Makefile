@@ -96,7 +96,7 @@ endif
 SIM_BUILD_OPTS ?=
 
 # Use this parameter to set the list of tests to run
-# TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample>
+# TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample, rv_torture>
 export TARGETS := 
 
 
@@ -314,8 +314,8 @@ run_verilator_wf: $(test_info)
 	printf "                          Test               | build | simulation \n" ; \
 	printf "$$(cat $(test_results)) \n"
 
-build_verilator:
-	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)";
+build_verilator: | $(bld_dir)
+	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)"
 
 run_rv_torture_test: build_verilator rv_torture
 	cd $(bld_dir); \
