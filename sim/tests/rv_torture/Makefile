@@ -7,7 +7,7 @@ default: log_requested_tgt $(bld_dir)/$(test_name).elf $(bld_dir)/$(test_name).h
 log_requested_tgt:
 	echo $(test_name).hex>> $(bld_dir)/test_info
 
-CFLAGS := -I$(inc_dir) -I$(src_dir) -DASM -Wa,-march=rv32$(ARCH) -march=rv32$(ARCH) -mabi=$(ABI) -D__riscv_xlen=32 -misa-spec=2.2
+CFLAGS := -O0 -I$(inc_dir) -I$(src_dir) -DASM -Wa,-march=rv32$(ARCH) -march=rv32$(ARCH) -mabi=$(ABI) -D__riscv_xlen=32 -misa-spec=2.2
 LDFLAGS := -static -fvisibility=hidden -nostdlib -nostartfiles -T$(inc_dir)/link.ld -march=rv32$(ARCH) -mabi=$(ABI)
 
 asm_objs := $(bld_dir)/$(test_name).o
@@ -22,7 +22,6 @@ $(bld_dir)/%.elf: $(asm_objs) | $(obj_dir)
 	$(RISCV_GCC) -o $@ $^ $(LDFLAGS)
 
 $(bld_dir)/%.hex: $(bld_dir)/%.elf
-	@echo creating hex file for rv_torture
 	$(RISCV_OBJCOPY) $^ $@
 
 $(bld_dir)/%.dump: $(bld_dir)/%.elf

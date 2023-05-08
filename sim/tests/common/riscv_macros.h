@@ -130,6 +130,8 @@ other_exception:                                                        \
         /* some unhandlable exception occurred */                       \
         li   a0, 0x1;                                                   \
 _report:                                                                \
+        li TESTNUM, 1;                                                  \
+        sw TESTNUM, tohost, x31;                                        \
         j sc_exit;                                                      \
         .balign  64;                                                    \
         .globl _start;                                                  \
@@ -198,8 +200,8 @@ _run_test:
 #define RVTEST_DATA_BEGIN                                                       \
         EXTRA_DATA                                                              \
         .pushsection .tohost,"aw",@progbits;                                    \
-        .balign 64; .global tohost; tohost: .dword 0;                           \
-        .balign 64; .global fromhost; fromhost: .dword 0;                       \
+        .balign 16; .global tohost; tohost: .dword 0;                           \
+        .balign 16; .global fromhost; fromhost: .dword 0;                       \
         .popsection;                                                            \
         .balign 16;                                                             \
         .global begin_regstate;  begin_regstate: .dword 0; .dword 0; .dword 0;  \

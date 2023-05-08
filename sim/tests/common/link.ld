@@ -8,7 +8,7 @@ OUTPUT_ARCH( "riscv" )
 ENTRY(_start)
 
 MEMORY {
-  RAM (rwx) : ORIGIN = 0x0, LENGTH = 64K
+  RAM (rwx) : ORIGIN = 0x0, LENGTH = 256K
 }
 
 STACK_SIZE = 1024;
@@ -18,17 +18,21 @@ CL_SIZE = 32;
 SECTIONS {
 
   /* code segment */
-  .text.init 0 : { 
-    FILL(0);
-    . = 0x100 - 12;
+  .text.init 0x2000 : { 
+    /* FILL(0); */
     SIM_EXIT = .;
     LONG(0x13);
     SIM_STOP = .;
     LONG(0x6F);
     LONG(-1);
-    . = 0x100;
     PROVIDE(__TEXT_START__ = .);
     *(.text.init) 
+  } >RAM
+
+  .tohost : { 
+    FILL(0);
+    *(.tohost) 
+    . = ALIGN(CL_SIZE);
   } >RAM
 
   .text  : {
