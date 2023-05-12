@@ -312,8 +312,8 @@ build_verilator: | $(bld_dir)
 	$(MAKE) -C $(root_dir)/sim build_verilator SIM_CFG_DEF=$(SIM_CFG_DEF) SIM_TRACE_DEF=$(SIM_TRACE_DEF) SIM_BUILD_OPTS="$(SIM_BUILD_OPTS)"
 
 run_rv_torture_test: 
-	$(MAKE) -C $(tst_dir)/rv_torture ARCH=$(ARCH)
-	cd $(bld_dir); \
+	@$(MAKE) -C $(tst_dir)/rv_torture ARCH=$(ARCH)
+	@cd $(bld_dir); \
 	$(bld_dir)/verilator/V$(top_module) \
 	+test_name=$(test_signature) \
 	+imem_pattern=$(imem_pattern) \

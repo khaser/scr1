@@ -16,16 +16,16 @@ $(obj_dir) :
 	mkdir -p $(obj_dir)
 
 $(bld_dir)/%.o: %.S 
-	$(RISCV_GCC) $(CFLAGS) $(ADD_ASM_MACRO) -c $< -o $@
+	@$(RISCV_GCC) $(CFLAGS) $(ADD_ASM_MACRO) -c $< -o $@
 
 $(bld_dir)/%.elf: $(asm_objs) | $(obj_dir)
-	$(RISCV_GCC) -o $@ $^ $(LDFLAGS)
+	@$(RISCV_GCC) -o $@ $^ $(LDFLAGS)
 
 $(bld_dir)/%.hex: $(bld_dir)/%.elf
-	$(RISCV_OBJCOPY) $^ $@
+	@$(RISCV_OBJCOPY) $^ $@
 
 $(bld_dir)/%.dump: $(bld_dir)/%.elf
-	$(RISCV_OBJDUMP) -D -w -x -S $^ > $@
+	@$(RISCV_OBJDUMP) -D -w -x -S $^ > $@
 
 clean:
 	$(RM) $(asm_objs) $(bld_dir)/$(test_name).elf $(bld_dir)/$(test_name).hex $(bld_dir)/$(test_name).dump
