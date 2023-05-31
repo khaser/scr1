@@ -19,7 +19,7 @@ module scr1_top_tb_ahb (
 // Local parameters
 //-------------------------------------------------------------------------------
 localparam                          SCR1_MEM_SIZE       = 1024*1024;
-localparam                          TIMEOUT             = 'd2000_000;//20ms;
+localparam                          TIMEOUT             = 'd200_000_000;//2000ms = 2s;
 localparam                          ARCH                = 'h1;
 localparam                          COMPLIANCE          = 'h2;
 localparam                          ADDR_START          = 'h2140;
